@@ -10,23 +10,20 @@ plot4 <- function(){
     PM_data <- readRDS("./data/summarySCC_PM25.rds")
     codeBook <- readRDS("./data/Source_Classification_Code.rds")
     
-    coal <- grep("Coal",codeBook$EI.Sector)
+    coal <- grep("[Cc]oal",codeBook$EI.Sector)
     CB_coal <- codeBook[coal, ]
     
-    PM_coal <- 
-    ## Select only the data for Baltimore City
-    ## BC_data <- filter(PM_data,fips=="24510")
-    ## rm(PM_data) ## remove the full data set
+    ## Select only the data for Coal
+    PM_coal <- filter(PM_data, SCC %in% CB_coal$SCC)
+    
+    rm(PM_data) ## remove the full data set
     
     ## aggregate data by year
-    PMagg <- summarise(group_by(BC_data, Year=year, Type=type), 
-                       Emissions=sum(Emissions))
+    PMagg <- summarise(group_by(PM_coal, Year=year), Emissions=sum(Emissions))
     
     ## plot the data!
-    qplot(Year,Emissions, data=PMagg, facets= ~Type)
-
-    dev.copy(png, file= "plot4.png") 
-    dev.off()
+    plot4 <- qplot(Year,Emissions, data=PMagg, main="Coal based emissions")
     
+    ggsave(plot4,file="plot4.png")    
     print("Plot saved as plot4.png in working directory")
 }

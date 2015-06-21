@@ -1,4 +1,4 @@
-plot3 <- function(){
+plot5 <- function(){
     
     library("ggplot2")
     library("plyr")
@@ -8,20 +8,25 @@ plot3 <- function(){
     ## assumes data is in data directory in working directory
     ## This first line will likely take a few seconds.
     PM_data <- readRDS("./data/summarySCC_PM25.rds")
-    ## codeBook <- readRDS("./data/Source_Classification_Code.rds")
+    codeBook <- readRDS("./data/Source_Classification_Code.rds")
     
+    road <- grep("Onroad",codeBook$Data.Category)
+    CB_road <- codeBook[road, ]
+    
+    PM_road <- 
     ## Select only the data for Baltimore City
-    BC_data <- filter(PM_data,fips=="24510")
-    rm(PM_data) ## remove the full data set
+    ## BC_data <- filter(PM_data,fips=="24510")
+    ## rm(PM_data) ## remove the full data set
     
     ## aggregate data by year
     PMagg <- summarise(group_by(BC_data, Year=year, Type=type), 
                        Emissions=sum(Emissions))
     
     ## plot the data!
-    plot3 <- qplot(Year,Emissions, data=PMagg, facets= ~Type)
+    qplot(Year,Emissions, data=PMagg, facets= ~Type)
 
-    ggsave(plot3,file="plot3.png")
+    dev.copy(png, file= "plot5.png") 
+    dev.off()
     
-    print("Plot saved as plot3.png in working directory")
+    print("Plot saved as plot5.png in working directory")
 }
