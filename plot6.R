@@ -21,20 +21,25 @@ plot6 <- function(){
     BC_road_data <- filter(PM_road,fips=="24510")
     LA_road_data <- filter(PM_road,fips=="06037")
     rm(PM_data) ## remove the full data set
+    rm(codeBook) ## remove full codebook
     
     ## aggregate data by year
-    PMagg_BC <- summarise(group_by(BC_road_data, Year=year, Type=type), 
+    PMagg_BC <- summarise(group_by(BC_road_data, Year=year), 
                        Emissions=sum(Emissions))
-    PMagg_BC$Loc = "Baltimore City"
-    PMagg_LA <- summarise(group_by(LA_road_data, Year=year, Type=type), 
-                          Emissions=sum(Emissions))
-    PMagg_LA$Loc = "Los Angeles County"
+    PMagg_BC$Location = "Baltimore City"
+    PMagg_BC$Comp  <- PMagg_BC$Emissions/ (PMagg_BC[which(PMagg_BC$Year==1999),]$Emissions)
     
+    PMagg_LA <- summarise(group_by(LA_road_data, Year=year), 
+                          Emissions=sum(Emissions))
+    PMagg_LA$Location = "Los Angeles County"
+    PMagg_LA$Comp  <- PMagg_LA$Emissions/ (PMagg_LA[which(PMagg_LA$Year==1999),]$Emissions)
     PMagg <- rbind(PMagg_LA, PMagg_BC)
     ## plot the data!
-    plot6 <- qplot(Year,Emissions, data=PMagg, color=Loc, geom="line")
+    plot6 <- qplot(Year,Comp, data=PMagg, color=Location, geom="line", 
+                   ylab="Normalised Comparision from 1999", 
+                   main= "Comparision based on normalised data (1999=1)")
     
     
-    ggsave(plot6,file="plot6.png", width=4, height=4, units="in", dpi=100)    
+    ggsave(plot6,file="plot6.png", width=8, height=4, units="in", dpi=100)    
     print("Plot saved as plot6.png in working directory")
 }
