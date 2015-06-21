@@ -25,6 +25,6 @@ plot4 <- function(){
     ## plot the data!
     plot4 <- qplot(Year,Emissions, data=PMagg, main="Coal based emissions")
     
-    ggsave(plot4,file="plot4.png")    
+    ggsave(plot4,file="plot4.png", width=4, height=4, units="in", dpi=100)    
     print("Plot saved as plot4.png in working directory")
 }

@@ -1,4 +1,4 @@
-plot5 <- function(){
+plot6 <- function(){
     
     library("ggplot2")
     library("plyr")
@@ -17,8 +17,9 @@ plot5 <- function(){
     ## Subset from subsetted codebook 
     PM_road <- filter(PM_data, SCC %in% CB_road$SCC)
     
-    ## Select only the data for Baltimore City
+    ## Select only the data for Baltimore City & LA County
     BC_road_data <- filter(PM_road,fips=="24510")
+    LA_road_data <- filter(PM_road,fips=="06037")
     rm(PM_data) ## remove the full data set
     
     ## aggregate data by year
@@ -26,9 +27,9 @@ plot5 <- function(){
                        Emissions=sum(Emissions))
     
     ## plot the data!
-    plot5 <- qplot(Year,Emissions, data=PMagg, geom="line",
+    plot6 <- qplot(Year,Emissions, data=PMagg, geom="line",
                    main="Road based emissions - Baltimore City")
     
-    ggsave(plot5,file="plot5.png", width=4, height=4, units="in", dpi=100)    
-    print("Plot saved as plot5.png in working directory")
+    ggsave(plot6,file="plot6.png", width=4, height=4, units="in", dpi=100)    
+    print("Plot saved as plot6.png in working directory")
 }

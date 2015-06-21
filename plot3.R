@@ -21,7 +21,7 @@ plot3 <- function(){
     ## plot the data!
     plot3 <- qplot(Year,Emissions, data=PMagg, facets= ~Type)
 
-    ggsave(plot3,file="plot3.png")
+    ggsave(plot3,file="plot3.png", width=4, height=4, units="in", dpi=100)
     
     print("Plot saved as plot3.png in working directory")
 }
