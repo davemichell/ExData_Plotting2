@@ -10,6 +10,7 @@ plot4 <- function(){
     PM_data <- readRDS("./data/summarySCC_PM25.rds")
     codeBook <- readRDS("./data/Source_Classification_Code.rds")
     
+    ## select coal entries in codebook
     coal <- grep("[Cc]oal",codeBook$EI.Sector)
     CB_coal <- codeBook[coal, ]
     
