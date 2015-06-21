@@ -23,12 +23,17 @@ plot6 <- function(){
     rm(PM_data) ## remove the full data set
     
     ## aggregate data by year
-    PMagg <- summarise(group_by(BC_road_data, Year=year, Type=type), 
+    PMagg_BC <- summarise(group_by(BC_road_data, Year=year, Type=type), 
                        Emissions=sum(Emissions))
+    PMagg_BC$Loc = "Baltimore City"
+    PMagg_LA <- summarise(group_by(LA_road_data, Year=year, Type=type), 
+                          Emissions=sum(Emissions))
+    PMagg_LA$Loc = "Los Angeles County"
     
+    PMagg <- rbind(PMagg_LA, PMagg_BC)
     ## plot the data!
-    plot6 <- qplot(Year,Emissions, data=PMagg, geom="line",
-                   main="Road based emissions - Baltimore City")
+    plot6 <- qplot(Year,Emissions, data=PMagg, color=Loc, geom="line")
+    
     
     ggsave(plot6,file="plot6.png", width=4, height=4, units="in", dpi=100)    
     print("Plot saved as plot6.png in working directory")
