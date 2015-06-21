@@ -15,19 +15,13 @@ plot3 <- function(){
     rm(PM_data) ## remove the full data set
     
     ## aggregate data by year
-    PMagg <- summarise(group_by(BC_data, year, type), sum(Emissions))
-        
-    ## if line below is commented out, the plot will be sent to the screen
-    png(file="plot3.png",width=480,height=480) 
+    PMagg <- summarise(group_by(BC_data, Year=year, Type=type), 
+                       Emissions=sum(Emissions))
     
     ## plot the data!
-    
-    
-    plot(PMagg$Year, PMagg$Emissions, type="b", xlab="Year", ylab="Total Emissions",
-         main="Baltimore City Emissions")
+    qplot(Year,Emissions, data=PMagg, facets= ~Type)
 
-    ## if the plot is sent to the screen, uncomment below to copy to a file
-    ## dev.copy(png, file= "plot3.png") 
+    dev.copy(png, file= "plot3.png") 
     dev.off()
     
     print("Plot saved as plot3.png in working directory")
